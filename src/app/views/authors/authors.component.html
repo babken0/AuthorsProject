@@ -1,0 +1,116 @@
+<main class="container">
+  <div class="card-body">
+    <form [formGroup]="authorForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+
+        <div class="form-group col-6">
+          <label>Фамилия</label>
+          <input type="text" formControlName="lastName" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted &&  f['lastName'].errors }"/>
+          <div *ngIf="submitted &&  f['lastName'].errors" class="invalid-feedback">
+            <div *ngIf=" f['lastName'].errors['required']">Необходимо указать имя.</div>
+            <div *ngIf="f['lastName'].errors['minlength']">Фамилия должно быть не менее 5 символов.</div>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label>Имя</label>
+          <input type="text" formControlName="firstName" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f['firstName'].errors }"/>
+          <div *ngIf="submitted && f['firstName'].errors" class="invalid-feedback">
+            <div *ngIf="f['firstName'].errors['required']">Необходимо указать фамилию.</div>
+            <div *ngIf="f['firstName'].errors['minlength']">Имя должно быть не менее 5 символов.</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label>Отчество</label>
+          <input type="text" formControlName="patronymic" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f['patronymic'].errors }"/>
+          <div *ngIf="submitted && f['patronymic'].errors" class="invalid-feedback">
+            <div *ngIf="f['patronymic'].errors['required']">Необходимо указать отчество.</div>
+            <div *ngIf="f['patronymic'].errors['minlength']">Отчество должно быть не менее 5 символов.</div>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label>Дата рождения</label>
+          <input type="date" formControlName="birthDay" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f['birthDay'].errors }"/>
+          <div *ngIf="submitted && f['birthDay'].errors" class="invalid-feedback">
+            <div *ngIf="f['birthDay'].errors['required']">Дата рождения обязательна.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-6">
+          <div *ngIf="submitted && authorIsExists" class="text-danger">Автор уже есть!</div>
+        </div>
+      </div>
+
+
+      <div class="text-center">
+        <button class="btn btn-primary mr-1">Register</button>
+        <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="mat-elevation-z8">
+
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="lastName" matSortDirection="asc"
+           matSortDisableClear>
+      <tr>
+        <td>Test</td>
+      </tr>
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>
+          ID
+        </th>
+        <td mat-cell *matCellDef="let author"> {{author.id}} </td>
+      </ng-container>
+
+      <!-- LastName Column -->
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by lastName">
+          Фамилия
+        </th>
+        <td mat-cell *matCellDef="let author"> {{author?.lastName}} </td>
+      </ng-container>
+
+      <!-- FirstName Column -->
+      <ng-container matColumnDef="firsName">
+        <th mat-header-cell *matHeaderCellDef>
+          Имя
+        </th>
+        <td mat-cell *matCellDef="let author"> {{author.firstName}} </td>
+      </ng-container>
+
+      <!-- Patronymic Column -->
+      <ng-container matColumnDef="patronymic">
+        <th mat-header-cell *matHeaderCellDef>
+          Отчество
+        </th>
+        <td mat-cell *matCellDef="let author"> {{author.patronymic}} </td>
+      </ng-container>
+
+      <!-- BirthDay Column -->
+      <ng-container matColumnDef="birthDay">
+        <th mat-header-cell *matHeaderCellDef>
+          Дата рождения
+        </th>
+        <td mat-cell *matCellDef="let author"> {{author.birthDay}} </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+
+</main>
+
+
