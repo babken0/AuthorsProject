@@ -1,3 +1,111 @@
-<table mat-table [dataSource]="books$ | async">
-  ...
-</table>
+<main class="container">
+  <div class="card-body">
+    <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+
+        <div class="form-group col-6">
+          <label>Название</label>
+          <input type="text" formControlName="name" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted &&  f['name'].errors }"/>
+          <div *ngIf="submitted &&  f['name'].errors" class="invalid-feedback">
+            <div *ngIf=" f['name'].errors['required']">Необходимо указать название.</div>
+            <div *ngIf="f['name'].errors['minlength']">Название должно быть не менее 5 символов.</div>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label>Издатель</label>
+          <input type="text" formControlName="publisher" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f['publisher'].errors }"/>
+          <div *ngIf="submitted && f['publisher'].errors" class="invalid-feedback">
+            <div *ngIf="f['publisher'].errors['required']">Необходимо указать имя издателя.</div>
+            <div *ngIf="f['publisher'].errors['minlength']">Имя издателя должно быть не менее 5 символов.</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label>Год</label>
+          <input type="number" formControlName="year" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f['year'].errors }"/>
+          <div *ngIf="submitted && f['year'].errors" class="invalid-feedback">
+            <div *ngIf="f['year'].errors['required']">Необходимо указать год.</div>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label>Автор</label>
+          <select formControlName="authorId" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['authorId'].errors }">
+            <option disabled selected value>Выбирайте автора</option>
+            <option [value]="author.id"
+                    *ngFor="let author of $authors |async ">{{author.lastName + ' ' + author.firstName + ' ' + author.patronymic }}</option>
+          </select>
+          <div *ngIf="submitted && f['authorId'].errors" class="invalid-feedback">
+            <div *ngIf="f['authorId'].errors['required']">Автор обязательна.</div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="text-center">
+        <button class="btn btn-primary mr-1">Register</button>
+        <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+
+  <div class="mat-elevation-z8">
+
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>
+          ID
+        </th>
+        <td mat-cell *matCellDef="let book"> {{book.id}} </td>
+      </ng-container>
+
+      <!-- Author Column -->
+      <ng-container matColumnDef="authorId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+          Автор
+        </th>
+        <td mat-cell *matCellDef="let book"> {{ +book.authorId | authorName | async}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by weight">
+          Название
+        </th>
+        <td mat-cell *matCellDef="let book"> {{book.name}} </td>
+      </ng-container>
+
+      <!-- Publisher Column -->
+      <ng-container matColumnDef="publisher">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by symbol">
+          Издатель
+        </th>
+        <td mat-cell *matCellDef="let book"> {{book.publisher}} </td>
+      </ng-container>
+
+      <!-- Year Column -->
+      <ng-container matColumnDef="year">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by symbol">
+          Год
+        </th>
+        <td mat-cell *matCellDef="let book"> {{book.year}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+  </div>
+
+
+</main>
+
+

@@ -1,7 +1,7 @@
-export interface Author{
+export interface Author {
   "id": number,
-  "firsName": string,
+  "firstName": string,
   "lastName": string,
   "patronymic": string,
-  "birthDay": number,
+  "birthDay": string,
 }
